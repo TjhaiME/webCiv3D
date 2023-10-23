@@ -1,0 +1,3 @@
+The player controller is enough to make a fun physics/parkour game,
+procedurally generate parkour map
+with physics obstacles/kickers
