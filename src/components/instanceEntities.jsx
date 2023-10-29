@@ -47,8 +47,8 @@ var needsUpdate = false
 var hoveredInstanceID = -1
 // get_inital_world_data()
 // console.log(worldTiles)
-export var InstancedBoxes = ({entities,worldInfo,worldTiles,clickFunction}) => {
-//function InstancedBoxes({worldInfo,worldTiles,choosemessage}){
+//export const InstancedBoxes = () => {
+function InstancedEntities({entities,choosemessage}){
 
   const worldRadius = worldInfo.worldRadius
   const totalGridSize = worldInfo.totalGridSize
@@ -59,9 +59,8 @@ export var InstancedBoxes = ({entities,worldInfo,worldTiles,clickFunction}) => {
   //const ref = useRef()
   const tempObject = new THREE.Object3D()
   
-  const worldMeshRef = useRef()
+  const meshRef = useRef()
   const prevRef = useRef()
-  const entityMeshRef = useRef()
   useLayoutEffect(() => void (prevRef.current = hovered), [hovered])
   //const gridWidth = 100
   //const totalGrid = gridWidth*gridWidth
@@ -95,97 +94,44 @@ export var InstancedBoxes = ({entities,worldInfo,worldTiles,clickFunction}) => {
       
       if (hovered !== prevRef.Current) {
         ;(id === hovered ? tempColor.setRGB(10, 10, 10) : tempColor.set(data[id].color)).toArray(colorArray, id * 3)
-        worldMeshRef.current.geometry.attributes.color.needsUpdate = true
+        meshRef.current.geometry.attributes.color.needsUpdate = true
       }
       // const scale = (data[id].scale = THREE.MathUtils.lerp(data[id].scale, id === hovered ? 2.5 : 1, 0.1))
       // tempObject.scale.setScalar(scale)
 
 
       tempObject.updateMatrix()
-      worldMeshRef.current.setMatrixAt(id, tempObject.matrix)
+      meshRef.current.setMatrixAt(id, tempObject.matrix)
     }
-    worldMeshRef.current.instanceMatrix.needsUpdate = true
+    meshRef.current.instanceMatrix.needsUpdate = true
     needsUpdate = false//turn off updates
-  //})
-  
-  
-
-  /////////////////////////////////////////////////
-  //      code for entities          
-  ///////////////////////////////////////////////
-  //
-  // This is difficult as they can disappear
-  
-    const amountOfEntities = Object.keys(entities).length
-    for (const key of Object.keys(entities)){
-      var instID = entities[key].instID
-      // if(instID == -1){
-      //   //then an instance ID has not been assigned for this model
-        
-      // }
-      const tileID = hex.IDFromGridPos(entities[key].gridPos, worldInfo.worldRadius)
-      const tileKey = String(tileID)
-      const yPos = worldTiles[tileKey]["noise"]
-      tempObject.position.set(worldTiles[tileKey]["posX"], maxHeight*yPos, worldTiles[tileKey]["posY"])
-
-      tempObject.updateMatrix()
-      entityMeshRef.current.setMatrixAt(instID, tempObject.matrix)
-
-    }
-    entityMeshRef.current.instanceMatrix.needsUpdate = true
-
-  
   })
   needsUpdate = true
-
-
   return (
-    <>
-      <instancedMesh
-      ref={worldMeshRef}
-      args={[null, null, totalGridSize]}
-      onPointerMove={(e) => (e.stopPropagation(), set(e.instanceId))}
-      onPointerOver={e => {
-        e.stopPropagation()
-        // ...
-        hoveredInstanceID = e.instanceId
-      }}
-      onPointerDown={e => {
-        e.stopPropagation()
-        // ...
-        //if we are here then we are clicking a land tile
-        //change 1st param to typeID_to_word["land"]
-        clickFunction(2, e.instanceId)
-      }}
-      onPointerOut={(e) => set(undefined)}
-      //onPointerMove={(e)=>{if (e.instanceId == hoveredInstanceID) }}
-      // onClick={(e)=>choosemessage("ChildString", e.instanceId)}
-      >
-        <cylinderGeometry args={[0.49, 0.49, 5, 6, 2]} >
-        <instancedBufferAttribute attach="attributes-color" args={[colorArray, 3]} />
-        </cylinderGeometry>
-        <meshBasicMaterial toneMapped={false} vertexColors />
-      </instancedMesh>
-
-      <instancedMesh
-      ref={entityMeshRef}
-      args={[null, null, totalGridSize]}>
-        <boxGeometry args={[0.2, 10, 0.2]} />
-        <meshBasicMaterial toneMapped={false} vertexColors />
-      </instancedMesh>
-
-    </>
+    <instancedMesh
+    ref={meshRef}
+    args={[null, null, totalGridSize]}
+    onPointerMove={(e) => (e.stopPropagation(), set(e.instanceId))}
+    onPointerOver={e => {
+      e.stopPropagation()
+      // ...
+      hoveredInstanceID = e.instanceId
+    }}
+    onPointerDown={e => {
+      e.stopPropagation()
+      // ...
+      choosemessage("ChildString", e.instanceId)
+    }}
+    onPointerOut={(e) => set(undefined)}
+    //onPointerMove={(e)=>{if (e.instanceId == hoveredInstanceID) }}
+    // onClick={(e)=>choosemessage("ChildString", e.instanceId)}
+    >
+      <cylinderGeometry args={[0.25, 0.25, 1, 7, 2]} >
+      <instancedBufferAttribute attach="attributes-color" args={[colorArray, 3]} />
+      </cylinderGeometry>
+      <meshBasicMaterial toneMapped={false} vertexColors />
+    </instancedMesh>
   )
 }
-//export default InstancedBoxes
+export default InstancedBoxes
 
-
-
-
-//really we want to only load the worldTiles that are within
-// range and for each of those we check
-// the structureID and entityID then load those if needed
-
-
-//or we need a more complicted way of loading meshes, we need to group instances together basded on mesh models and
-//make an instance for each type

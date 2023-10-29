@@ -1,6 +1,71 @@
 #root {
   width: 100vw;
-  height: 100vh;
+  height: 90vh;
   background-color: aqua;
   
+}
+#uiTest {
+  width: 100vw;
+  height: 10vh;
+  background-color: rgb(11, 96, 165);
+  display:flex;
+  justify-content: space-around;
+    
+}
+.UI_button {
+  width:10%;
+  height:90%;
+  border-radius:50%;
+}
+.UI_contextual {
+  width:7%;
+  height:85%;
+  border-radius:50%;
+  background-color: rgb(243, 14, 155);
+}
+#nextButton {
+  background-color: chartreuse;
+}
+#openBuildMenu {
+  background-color: rgb(71, 70, 126);
+}
+#moveUnit {
+  background-color: rgb(189, 33, 33);
+}
+
+
+.overlayMenu{
+  /* //make overlay the canvas on the side or middle if possible */
+  width : 50%;
+  height : 80%;
+  position: fixed;
+  z-index:2;
+  cursor:pointer;
+}
+
+#menuHeader {
+  width:100%;
+  height:10%;
+  display:flex;
+  justify-content:space-around;
+  flex-direction:row;
+}
+#menuBody {
+  width:100%;
+  height:auto;
+}
+.headerButton {
+  width:10%;
+  height:90%;
+  border-radius:50%;
+}
+#exitButton{
+  background-color:red;
+  /* //TODO:need a hover state too */
+}
+#backButton{
+  background-color:yellow;
+}
+.buildMenuButton{
+
 }
