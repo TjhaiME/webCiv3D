@@ -1012,3 +1012,42 @@ function find_path_on_grid_with_dijkstra_algorithim(initialVertex, finalVertex){
     //console.log("stringPath = ", stringPath)
     return vertexPath
   }
+
+
+
+
+//we want to do all things then have ai do their things then have a button appear to end all turns
+function end_of_all_turns(){
+  for(entityKey of Object.keys(entities)){
+	  //restore values
+	typeID = entities[entityKey].unitTypeID
+ 	//if healthy
+	entities[entityKey].HP += entities[entityKey].HPperTurn
+        if(climbing){
+		//if we are flagged as climbing then we save our MP until we hav3 enough to climb a hill
+	        entities[entityKey].MP += entities[entityKey].maxMP
+	}else{
+		entities[entityKey].MP = entities[entityKey].maxMP
+	}
+  }
+	
+  for(structKey of Object.keys(structures)){
+	  if( structures[structKey].doingTask){//FIX
+		  //add production to task
+		  //see if task is complete
+	  }
+	  //restore some health
+  }
+
+		  
+
+
+
+
+}
+
+
+
+
+
+
